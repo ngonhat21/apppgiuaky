@@ -1,0 +1,22 @@
+{
+  "products": {
+    "sp001": {
+      "name": "Áo thun cotton",
+      "price": 159000,
+      "soluong": 24,
+      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABkCAIAAADCEmNlAAAAy0lEQVR4nO3QQQkAIADAQPsX8m8BK9lCYR4swLgx99KFxvODTwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINutUBx/X1N19tljcAAAAASUVORK5CYII="
+    },
+    "sp002": {
+      "name": "Túi vải canvas",
+      "price": 89000,
+      "soluong": 5,
+      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABkCAIAAADCEmNlAAAAy0lEQVR4nO3QAQkAIADAMPtXMYoZ7GILhTt4gLOx19SFxvODTwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINutUB3e749cQhnO4AAAAASUVORK5CYII="
+    },
+    "sp003": {
+      "name": "Bình giữ nhiệt",
+      "price": 249000,
+      "soluong": 12,
+      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABkCAIAAADCEmNlAAAAy0lEQVR4nO3QAQkAIADAMPu3MIUdTGULhTt4gLMx19aFxvODTwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINuhVo0K1Ag24FGnQr0KBbgQbdCjToVqBBtwINutUBfk//jpK0/PgAAAAASUVORK5CYII="
+    }
+  }
+}
