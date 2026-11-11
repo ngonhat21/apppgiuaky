@@ -7,7 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+
+import 'catalog.dart';
 
 import 'product.dart';
 
@@ -41,15 +42,8 @@ class AdminApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'Kho hàng • Admin',
-    theme: ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff346754)),
-      scaffoldBackgroundColor: const Color(0xfff5f7f5),
-      inputDecorationTheme: const InputDecorationTheme(
-        border: OutlineInputBorder(),
-      ),
-    ),
+    title: 'S-Market · Kênh người bán',
+    theme: shopTheme(),
     home: startupError != null
         ? Scaffold(body: Center(child: Text(startupError!)))
         : !configured
@@ -82,11 +76,7 @@ class SetupPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.inventory_2_outlined,
-                size: 64,
-                color: Color(0xff346754),
-              ),
+              Icon(Icons.inventory_2_outlined, size: 64, color: shopOrange),
               SizedBox(height: 24),
               Text(
                 'Kết nối kho hàng',
@@ -166,85 +156,87 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: SizedBox(
-          width: 420,
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(32),
-              child: Form(
-                key: form,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.inventory_2_outlined,
-                      size: 50,
-                      color: Color(0xff346754),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Quản lý kho hàng',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 27,
-                        fontWeight: FontWeight.bold,
+    body: LoginBackdrop(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: SizedBox(
+            width: 420,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Form(
+                  key: form,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.inventory_2_outlined,
+                        size: 50,
+                        color: shopOrange,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Đăng nhập dành cho quản trị viên',
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 32),
-                    TextFormField(
-                      controller: email,
-                      keyboardType: TextInputType.emailAddress,
-                      autofillHints: const [AutofillHints.username],
-                      decoration: const InputDecoration(labelText: 'Email'),
-                      validator: (v) => v != null && v.contains('@')
-                          ? null
-                          : 'Nhập email hợp lệ',
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: password,
-                      obscureText: hidden,
-                      autofillHints: const [AutofillHints.password],
-                      onFieldSubmitted: (_) => login(),
-                      decoration: InputDecoration(
-                        labelText: 'Mật khẩu',
-                        suffixIcon: IconButton(
-                          onPressed: () => setState(() => hidden = !hidden),
-                          icon: Icon(
-                            hidden
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                          ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Chào mừng trở lại!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 27,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Nhập mật khẩu' : null,
-                    ),
-                    if (error != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Text(
-                          error!,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Đăng nhập để quản lý gian hàng của bạn',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 32),
+                      TextFormField(
+                        controller: email,
+                        keyboardType: TextInputType.emailAddress,
+                        autofillHints: const [AutofillHints.username],
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        validator: (v) => v != null && v.contains('@')
+                            ? null
+                            : 'Nhập email hợp lệ',
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: password,
+                        obscureText: hidden,
+                        autofillHints: const [AutofillHints.password],
+                        onFieldSubmitted: (_) => login(),
+                        decoration: InputDecoration(
+                          labelText: 'Mật khẩu',
+                          suffixIcon: IconButton(
+                            onPressed: () => setState(() => hidden = !hidden),
+                            icon: Icon(
+                              hidden
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                            ),
                           ),
                         ),
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Nhập mật khẩu' : null,
                       ),
-                    const SizedBox(height: 24),
-                    FilledButton(
-                      onPressed: busy ? null : login,
-                      child: Text(busy ? 'Đang đăng nhập…' : 'Đăng nhập'),
-                    ),
-                  ],
+                      if (error != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Text(
+                            error!,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 24),
+                      FilledButton(
+                        onPressed: busy ? null : login,
+                        child: Text(busy ? 'Đang đăng nhập…' : 'Đăng nhập'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -264,13 +256,6 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   final ref = FirebaseDatabase.instance.ref('products');
   late final Stream<DatabaseEvent> events = ref.onValue;
-  String query = '', sort = 'name';
-  bool lowStock = false;
-  final money = NumberFormat.currency(
-    locale: 'vi_VN',
-    symbol: '₫',
-    decimalDigits: 0,
-  );
   Future<void> edit([Product? product]) async {
     await showDialog<void>(
       context: context,
@@ -309,351 +294,85 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text(
-        'KHO HÀNG / ADMIN',
-        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
-      ),
-      actions: [
-        IconButton(
-          tooltip: 'Đăng xuất',
-          onPressed: () async {
-            try {
-              await FirebaseAuth.instance.signOut();
-            } catch (e) {
-              if (context.mounted) message(context, friendlyError(e));
-            }
-          },
-          icon: const Icon(Icons.logout),
-        ),
-        const SizedBox(width: 16),
-      ],
-    ),
-    body: StreamBuilder<DatabaseEvent>(
-      stream: events,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(
+  Widget build(BuildContext context) => StreamBuilder<DatabaseEvent>(
+    stream: events,
+    builder: (context, snapshot) {
+      if (snapshot.hasError) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('S-Market'),
+            actions: [
+              IconButton(
+                tooltip: 'Đăng xuất',
+                onPressed: logout,
+                icon: const Icon(Icons.logout),
+              ),
+            ],
+          ),
+          body: const Center(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24),
               child: Text(
-                'Không thể đọc dữ liệu. Kiểm tra kết nối và UID quản trị viên trong Firebase Rules.\n${snapshot.error}',
-                textAlign: TextAlign.center,
+                'Không thể đọc dữ liệu. Kiểm tra kết nối và UID admin trong Firebase Rules.',
               ),
-            ),
-          );
-        }
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final all = <Product>[];
-        try {
-          for (final child in snapshot.data!.snapshot.children) {
-            all.add(
-              Product.fromJson(
-                child.key!,
-                Map<String, dynamic>.from(child.value as Map),
-              ),
-            );
-          }
-        } catch (_) {
-          return const Center(
-            child: Text(
-              'Dữ liệu sai định dạng. Mỗi sản phẩm phải có đúng 4 trường theo đề.',
-            ),
-          );
-        }
-        final products = all
-            .where(
-              (p) =>
-                  p.name.toLowerCase().contains(query.toLowerCase()) &&
-                  (!lowStock || p.soluong <= 5),
-            )
-            .toList();
-        products.sort(
-          (a, b) => sort == 'price'
-              ? a.price.compareTo(b.price)
-              : sort == 'soluong'
-              ? a.soluong.compareTo(b.soluong)
-              : a.name.toLowerCase().compareTo(b.name.toLowerCase()),
-        );
-        return Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1280),
-            child: ListView(
-              padding: const EdgeInsets.all(24),
-              children: [
-                Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 24,
-                  runSpacing: 16,
-                  children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Sản phẩm',
-                          style: TextStyle(
-                            fontSize: 34,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text('Theo dõi và cập nhật kho hàng của bạn'),
-                      ],
-                    ),
-                    FilledButton.icon(
-                      onPressed: () => edit(),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Thêm sản phẩm'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 12,
-                  children: [
-                    stat(
-                      'Sản phẩm',
-                      '${all.length}',
-                      Icons.inventory_2_outlined,
-                    ),
-                    stat(
-                      'Tổng số lượng',
-                      '${all.fold<int>(0, (s, p) => s + p.soluong)}',
-                      Icons.layers_outlined,
-                    ),
-                    stat(
-                      'Giá trị kho',
-                      money.format(
-                        all.fold<double>(0, (s, p) => s + p.price * p.soluong),
-                      ),
-                      Icons.payments_outlined,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 12,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 300,
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: 'Tìm tên sản phẩm…',
-                          prefixIcon: Icon(Icons.search),
-                        ),
-                        onChanged: (v) => setState(() => query = v),
-                      ),
-                    ),
-                    DropdownButton<String>(
-                      value: sort,
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'name',
-                          child: Text('Tên A → Z'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'price',
-                          child: Text('Giá tăng dần'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'soluong',
-                          child: Text('Số lượng tăng dần'),
-                        ),
-                      ],
-                      onChanged: (v) => setState(() => sort = v!),
-                    ),
-                    FilterChip(
-                      label: const Text('Sắp hết hàng (≤ 5)'),
-                      selected: lowStock,
-                      onSelected: (v) => setState(() => lowStock = v),
-                    ),
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        await Clipboard.setData(
-                          ClipboardData(
-                            text: const JsonEncoder.withIndent('  ').convert({
-                              'products': {
-                                for (final p in all) p.id: p.toJson(),
-                              },
-                            }),
-                          ),
-                        );
-                        if (context.mounted) {
-                          message(
-                            context,
-                            'Đã sao chép JSON. Dán vào file products.json để nộp.',
-                          );
-                        }
-                      },
-                      icon: const Icon(Icons.data_object),
-                      label: const Text('Sao chép JSON'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  '${products.length} sản phẩm',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                if (products.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.all(48),
-                    child: Center(
-                      child: Text(
-                        'Chưa có sản phẩm phù hợp. Thêm sản phẩm hoặc thay đổi bộ lọc.',
-                      ),
-                    ),
-                  ),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final count = constraints.maxWidth > 1000
-                        ? 4
-                        : constraints.maxWidth > 720
-                        ? 3
-                        : constraints.maxWidth > 480
-                        ? 2
-                        : 1;
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: count,
-                        mainAxisExtent: 350,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                      ),
-                      itemCount: products.length,
-                      itemBuilder: (context, i) {
-                        final p = products[i];
-                        return Card(
-                          clipBehavior: Clip.antiAlias,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(child: productImage(p.image)),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  16,
-                                  16,
-                                  16,
-                                  8,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      p.name,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      money.format(p.price),
-                                      style: const TextStyle(
-                                        fontSize: 19,
-                                        color: Color(0xff346754),
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      'Còn ${p.soluong} sản phẩm',
-                                      style: TextStyle(
-                                        color: p.soluong <= 5
-                                            ? Colors.deepOrange
-                                            : Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                ),
-                                child: Row(
-                                  children: [
-                                    TextButton.icon(
-                                      onPressed: () => edit(p),
-                                      icon: const Icon(
-                                        Icons.edit_outlined,
-                                        size: 18,
-                                      ),
-                                      label: const Text('Sửa'),
-                                    ),
-                                    const Spacer(),
-                                    IconButton(
-                                      tooltip: 'Xóa ${p.name}',
-                                      onPressed: () => remove(p),
-                                      icon: const Icon(
-                                        Icons.delete_outline,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
             ),
           ),
         );
-      },
-    ),
-  );
-  Widget stat(String label, String value, IconData icon) => SizedBox(
-    width: 270,
-    child: Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          children: [
-            Icon(icon, color: const Color(0xff346754), size: 30),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(label),
-                  Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+      }
+      if (!snapshot.hasData) {
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      }
+      final products = <Product>[];
+      try {
+        for (final child in snapshot.data!.snapshot.children) {
+          products.add(
+            Product.fromJson(
+              child.key!,
+              Map<String, dynamic>.from(child.value as Map),
             ),
-          ],
-        ),
-      ),
-    ),
+          );
+        }
+      } catch (_) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('S-Market'),
+            actions: [
+              IconButton(
+                tooltip: 'Đăng xuất',
+                onPressed: logout,
+                icon: const Icon(Icons.logout),
+              ),
+            ],
+          ),
+          body: const Center(
+            child: Text('Dữ liệu sai định dạng. Kiểm tra bốn trường sản phẩm.'),
+          ),
+        );
+      }
+      return ProductCatalog(
+        products: products,
+        onAdd: () => edit(),
+        onEdit: edit,
+        onDelete: remove,
+        onLogout: logout,
+        imageBuilder: productImage,
+      );
+    },
   );
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      if (mounted) message(context, friendlyError(e));
+    }
+  }
 }
 
 Widget productImage(String source) {
   Widget fallback() => const ColoredBox(
-    color: Color(0xffe8eee9),
+    color: Color(0xfff6f3ef),
     child: Center(
-      child: Icon(Icons.image_outlined, size: 48, color: Color(0xff789083)),
+      child: Icon(Icons.image_outlined, size: 48, color: Color(0xffd4b9a8)),
     ),
   );
   if (source.startsWith('data:image/')) {

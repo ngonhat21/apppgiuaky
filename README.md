@@ -96,3 +96,9 @@ NODE_PATH=../work/npm/node_modules node tool/rules_test.cjs
 ```
 
 Script chỉ kết nối loopback và nạp rules với UID test vào emulator; không gọi CSDL production. Có thể khởi động emulator bằng Firebase CLI (`firebase emulators:start --only database --project demo-apppgiuaky`).
+
+## Giao diện S-Market
+
+Giao diện quản trị màu cam lấy cảm hứng từ các sàn thương mại điện tử: màn hình đăng nhập hai cột trên desktop, thanh bên, banner gian hàng, thống kê tồn kho và thẻ sản phẩm. Trên điện thoại tự chuyển sang một cột. Các trạng thái còn hàng/sắp hết/hết hàng được tính từ `soluong`, không thêm trường vào CSDL.
+
+Để cập nhật từ bản ZIP cũ: sao lưu `firebase.config.json`, tải mã nguồn mới từ GitHub rồi chép toàn bộ thư mục `lib` mới vào dự án hiện tại. Dừng app bằng phím `q` trong terminal và chạy lại `flutter run -d chrome --dart-define-from-file=firebase.config.json`. Dữ liệu trên Firebase giữ nguyên. Ảnh mẫu trong JSON chỉ là ảnh màu đơn sắc; hãy dùng nút Chỉnh sửa để chọn ảnh sản phẩm thật.
